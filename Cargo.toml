@@ -17,3 +17,4 @@ euclid = "0.19"
 font-kit = { version = "0.2.0"} #, features = ["loader-freetype-default"] }
 unicode-normalization = "0.1.8"
 log = "0.4"
+lazy_static = "1.4.0"

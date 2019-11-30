@@ -26,9 +26,18 @@ fn make_unicode_funcs() -> *mut hb_unicode_funcs_t {
     }
 }
 
+struct Funcs(*mut hb_unicode_funcs_t);
+
+unsafe impl Sync for Funcs {}
+unsafe impl Send for Funcs {}
+
+lazy_static::lazy_static! {
+    static ref UNICODE_FUNCS: Funcs = Funcs(make_unicode_funcs());
+}
+
 pub fn install_unicode_funcs(buffer: &mut Buffer) {
     // TODO: probably want to lazy static initialize this
-    let funcs_ptr = make_unicode_funcs();
+    let funcs_ptr = UNICODE_FUNCS.0;
     unsafe {
         hb_unicode_funcs_set_combining_class_func(
             funcs_ptr,

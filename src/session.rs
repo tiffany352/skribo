@@ -91,6 +91,11 @@ impl<S: AsRef<str>> LayoutSession<S> {
         }
     }
 
+    /// Returns a reference to the text passed to LayoutSession::create().
+    pub fn text(&self) -> &str {
+        self.text.as_ref()
+    }
+
     /// Iterate through all glyphs in the layout.
     ///
     /// Note: this is redundant with `iter_substr` with the whole string, might

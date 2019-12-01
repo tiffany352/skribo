@@ -7,10 +7,12 @@ use std::sync::Arc;
 use crate::Font;
 
 /// A collection of fonts
+#[derive(Debug)]
 pub struct FontCollection {
     pub(crate) families: Vec<FontFamily>,
 }
 
+#[derive(Debug)]
 pub struct FontFamily {
     // TODO: multiple weights etc
     pub(crate) fonts: Vec<FontRef>,

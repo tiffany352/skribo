@@ -26,20 +26,8 @@ impl HbFace {
     pub fn new(font: &FontRef) -> HbFace {
         let data = font.font.copy_font_data().expect("font data unavailable");
         let blob = Blob::new_from_arc_vec(data);
-        unsafe {
-            let hb_face = hb_face_create(blob.into_raw(), 0);
-            HbFace { hb_face }
-        }
-    }
-}
-
-impl Clone for HbFace {
-    fn clone(&self) -> HbFace {
-        unsafe {
-            HbFace {
-                hb_face: hb_face_reference(self.hb_face),
-            }
-        }
+        let hb_face = unsafe { hb_face_create(blob.as_raw(), 0) };
+        HbFace { hb_face, blob }
     }
 }
 
@@ -133,7 +121,10 @@ pub(crate) fn layout_fragment(
             let unsafe_to_break = flags & HB_GLYPH_FLAG_UNSAFE_TO_BREAK != 0;
             trace!(
                 "{:?} {:?} {} {}",
-                glyph, pos, glyph.cluster, unsafe_to_break
+                glyph,
+                pos,
+                glyph.cluster,
+                unsafe_to_break
             );
             let g = FragmentGlyph {
                 cluster: glyph.cluster,
@@ -152,7 +143,7 @@ pub(crate) fn layout_fragment(
             script,
             glyphs: glyphs,
             advance: total_adv,
-            hb_face: hb_face.clone(),
+            hb_face,
             font: font.clone(),
         }
     }

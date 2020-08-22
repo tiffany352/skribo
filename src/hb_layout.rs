@@ -103,7 +103,6 @@ pub fn layout_run(style: &TextStyle, font: &FontRef, text: &str) -> Layout {
             let mut glyphs = Vec::new();
             let scale = style.size / (font.font.metrics().units_per_em as f32);
             for (glyph, pos) in glyph_infos.iter().zip(glyph_positions.iter()) {
-                debug!("{:?} {:?}", glyph, pos);
                 let adv = vec2i(pos.x_advance, pos.y_advance);
                 let adv_f = adv.to_f32() * scale;
                 let offset = vec2i(pos.x_offset, pos.y_offset).to_f32() * scale;
@@ -159,13 +158,7 @@ pub(crate) fn layout_fragment(
             let offset = vec2i(pos.x_offset, pos.y_offset).to_f32() * scale;
             let flags = hb_glyph_info_get_glyph_flags(glyph);
             let unsafe_to_break = flags & HB_GLYPH_FLAG_UNSAFE_TO_BREAK != 0;
-            trace!(
-                "{:?} {:?} {} {}",
-                glyph,
-                pos,
-                glyph.cluster,
-                unsafe_to_break
-            );
+
             let g = FragmentGlyph {
                 cluster: glyph.cluster,
                 advance: adv_f,
